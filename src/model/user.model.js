@@ -1,41 +1,14 @@
-import { checkSchema } from 'express-validator';
-import { model, Schema } from 'mongoose';
-import bcrypt from 'bcrypt';
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../db.js';
 
-const UserShema = new Schema({
+export const UserModel = sequelize.define('User', {
   email: {
-    type: String,
-    required: true,
-    unique: true
+    type: DataTypes.STRING,
+    allowNull: false
   },
   password: {
-    type: String,
-    required: true
+    type: DataTypes.STRING
   }
-}, { timestamps: true });
-
-UserShema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
-
-  const hashedPassword = await bcrypt.hash(this.password, 10);
-  this.password = hashedPassword;
-
-  next();
-});
-
-export const UserModel = model('User', UserShema);
-
-export const createUserSchema = checkSchema({
-  email: {
-    errorMessage: 'Invalid email',
-    isEmail: true
-  },
-  password: {
-    isLength: {
-      options: { min: 8 },
-      errorMessage: 'Password should be at least 8 chars'
-    }
-  }
+}, {
+  timestamps: true
 });

@@ -1,7 +1,6 @@
-import { connect } from 'mongoose';
+import { Sequelize } from 'sequelize';
 
-export async function createConnection () {
-  await connect('mongodb://localhost:27017/node_express-validator')
-    .then((info) => console.log(`Connected to: ${info.connections[0].db.databaseName}`))
-    .catch((error) => console.log(`Error: ${error}`));
-}
+export const sequelize = new Sequelize('express_validator', 'root', 'root', {
+  host: 'localhost',
+  dialect: 'mysql'
+});

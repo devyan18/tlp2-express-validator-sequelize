@@ -2,9 +2,7 @@ import { UserModel } from '../model/user.model.js';
 
 export const createUserCtrl = async (req, res) => {
   try {
-    const newUser = new UserModel(req.body);
-    await newUser.save();
-
+    const newUser = await UserModel.create(req.body);
     res.status(201).json(newUser);
   } catch (error) {
     res.status(500).json({ error: error.message });
